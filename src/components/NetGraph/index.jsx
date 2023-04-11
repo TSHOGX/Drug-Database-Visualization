@@ -18,14 +18,14 @@ function genRandomTree(N = 300, reverse = false) {
   };
 }
 
-
-const NetGraph = () => {
+const NetGraph = ({ focused, setFocusedNode, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   
   const [highlightNodes, setHighlightNodes] = React.useState(new Set());
   const [highlightLinks, setHighlightLinks] = React.useState(new Set());
   const [hoverNode, setHoverNode] = React.useState(null);
+  const [changed, setChanged] = React.useState(false);
   const fgRef = React.useRef();
 
   const data = React.useMemo(() => {
@@ -62,6 +62,24 @@ const NetGraph = () => {
     }
     setHoverNode(node || null);
     updateHighlight();
+  };
+
+  React.useEffect(() => {
+    if (changed) {
+      handleChange(focused);
+    }
+    setChanged(true);
+  },[focused])
+
+  const handleChange = (focused) => {
+    const node = netData.nodes.find(n => String(n.id) === String(focused));
+    const distance = 150;
+    const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
+    fgRef.current.cameraPosition(
+      { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
+      node, // lookAt ({ x, y, z })
+      2000  // ms transition duration
+    );
   };
 
   const handleClick = React.useCallback(node => {

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import NetGraph from "../../components/NetGraph";
@@ -12,12 +13,15 @@ const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const [focusedNode, setFocusedNode] = React.useState("0");
+  const [selected, setSelected] = React.useState([]);
+
   return (
     <Box width="90%" margin="0 auto" marginTop="10px" >
       <Box
         display="grid"
         gridTemplateColumns="repeat(6, 1fr)"
-        gridAutoRows="45px"
+        gridAutoRows="30px"
         gap="40px"
       >
 
@@ -32,7 +36,12 @@ const Dashboard = () => {
           justifyContent="center"
           overflow="hidden"
         >
-          <NetGraph />
+          <NetGraph 
+            focused={focusedNode}
+            setFocusedNode={setFocusedNode}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </Box>
 
 
@@ -56,7 +65,12 @@ const Dashboard = () => {
           gridRow="span 12"
           backgroundColor={colors.primary[400]}
         >
-          <SearchBar netData={netData.nodes} />
+          <SearchBar 
+            focused={focusedNode}
+            setFocusedNode={setFocusedNode}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </Box>
 
 

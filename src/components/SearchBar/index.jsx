@@ -13,26 +13,39 @@ import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HealingIcon from '@mui/icons-material/Healing';
+import { netData } from "../../data/netData";
 
 
-function SearchBar({netData}) {
+function SearchBar({ focused, setFocusedNode, selected, setSelected }) {
 
-  const [value, setValue] = React.useState();
+  const [value, setValue] = React.useState();  // can be removed, same as focused?
   // const [inputValue, setInputValue] = React.useState();
 
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
 
-  const [selected, setSelected] = React.useState([]);
-
-  const searchData = getArrayID(netData);
-  const filteredData = netData.filter(item => {
+  const searchData = getArrayID(netData.nodes);
+  const filteredData = netData.nodes.filter(item => {
     return selected.includes(String(item.id));
   });
 
-  const handleClick = (id) => {
+  const handleClickIcon = (id) => {
     setSelected(selected.filter(item => String(item) !== id));
   };
+
+  const handleClickList = (id) => {
+    setFocusedNode(id);  // can be sure it is in Dataset 
+  };
+
+  const handleSearched = (newValue) => {
+    if (selected.includes(String(newValue))==false) {
+      setSelected(selected.concat(String(newValue)));
+    }
+    if (searchData.includes(String(newValue))) {
+      setFocusedNode(String(newValue));
+    }
+    setValue(newValue);
+  }
 
   return (
     <Stack spacing={1} sx={{ width: "90%", margin: "0 auto"}} >
@@ -46,12 +59,7 @@ function SearchBar({netData}) {
       <br />
       <Autocomplete
         value={value}
-        onChange={(event, newValue) => {
-          if (selected.includes(String(newValue))==false) {
-            setSelected(selected.concat(String(newValue)));
-          }
-          setValue(newValue);
-        }}
+        onChange={(event, newValue) => handleSearched(newValue)}
         id="search-bar"
         options={searchData}
         renderInput={(params) => <TextField {...params} label="Search Drug" />}
@@ -86,8 +94,11 @@ function SearchBar({netData}) {
       {/* Selected List */}
       <List dense={dense}>
         {filteredData.map(item => (
-          <FormGroup row >
-            <ListItemButton>
+          <FormGroup row>
+            <ListItemButton
+              sx={{ width: "60%", margin: "0 auto"}}
+              onClick={() => handleClickList(String(item.id))}
+            >
               <ListItemIcon>
                 <HealingIcon />
               </ListItemIcon>
@@ -96,7 +107,10 @@ function SearchBar({netData}) {
                 secondary={secondary ? String(item.info) : null}
               />
             </ListItemButton>
-            <IconButton edge="end" aria-label="delete" onClick={() => handleClick(String(item.id))}>
+            <IconButton 
+              edge="end" aria-label="delete" sx={{ width: "30%", margin: "0 auto"}}
+              onClick={() => handleClickIcon(String(item.id))}
+            >
               <DeleteIcon />
             </IconButton>
           </FormGroup>
@@ -110,7 +124,7 @@ function SearchBar({netData}) {
 function getArrayID(data) {
   var arrayID = [];
   data.forEach((element) => {
-    arrayID.push(element.id);
+    arrayID.push(String(element.id));
   });
   return arrayID;
 }
