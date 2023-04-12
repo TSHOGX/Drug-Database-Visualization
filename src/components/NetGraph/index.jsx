@@ -3,8 +3,10 @@ import { ForceGraph3D } from 'react-force-graph';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { netData } from "../../data/netData";
-import * as dat from 'dat.gui';
+// import * as dat from 'dat.gui';
 
+const h = document.body.clientHeight;
+const w = document.body.clientWidth;
 
 function genRandomTree(N = 300, reverse = false) {
   return {
@@ -96,9 +98,11 @@ const NetGraph = ({ focused, setFocusedNode, selected, setSelected }) => {
   return (
     <ForceGraph3D 
       graphData={data}
+      width={0.4*w}
+      height={0.7*h}
       backgroundColor={colors.primary[400]}
 
-      nodeLabel="id"
+      nodeLabel={node => node.id + ": " + node.info}
       
       // link style
       linkDirectionalParticles={2}

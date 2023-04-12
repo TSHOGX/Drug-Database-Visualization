@@ -1,15 +1,22 @@
+import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
-import { lineData } from "../../data/lineData"
+import { netData } from "../../data/netData";
 
 
-const LineChart = () => {
+const lineData = netData.nodes.map(function(obj) {
+    obj['data'] = obj['lineData']; // Assign new key
+    delete obj['lineData']; // Delete old key
+    return obj;
+});
+
+const LineChart = ({ focused, setFocusedNode, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     return (
     <ResponsiveLine
-        data={lineData}
+        data={lineData.filter(item => selected.includes(String(item.id)))}
         theme={{
             axis: {
                 domain: {
@@ -45,12 +52,18 @@ const LineChart = () => {
             },
         }}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-        xScale={{ type: 'point' }}
+        xScale={{
+            type: 'time',
+            format: '%Y',
+            useUTC: false,
+            precision: 'day',
+        }}
+        xFormat="time:%Y"
         yScale={{
             type: 'linear',
             min: 'auto',
             max: 'auto',
-            stacked: true,
+            stacked: false,
             reverse: false
         }}
         yFormat=" >-.2f"
@@ -59,20 +72,22 @@ const LineChart = () => {
         axisRight={null}
         axisBottom={{
             orient: 'bottom',
+            format: '%Y',
+            tickValues: 'every 1 years',
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'transportation',
+            legend: 'year',
             legendOffset: 36,
             legendPosition: 'middle'
         }}
         axisLeft={{
             orient: 'left',
-            tickValues: 5, // added
+            tickValues: 5,
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'count',
+            legend: 'number',
             legendOffset: -40,
             legendPosition: 'middle'
         }}

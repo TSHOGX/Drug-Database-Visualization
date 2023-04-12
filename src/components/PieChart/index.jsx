@@ -1,15 +1,23 @@
+import React from 'react'
 import { ResponsivePie } from '@nivo/pie'
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
-import { pieData } from "../../data/pieData"
+import { netData } from "../../data/netData";
 
 
-const PieChart = () => {
+const PieChart = ({ focused, setFocusedNode, selected, setSelected, year }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    var focusedData = netData.nodes.filter(item => String(item.id) === String(focused))[0].pieData;
+    var data = focusedData[Object.keys(focusedData)[0]]
+    if (year !== null && focusedData[year] != null) {
+        data = focusedData[year];
+    }
+
     return (
         <ResponsivePie
-            data={pieData}
+            data={data}
             theme={{
                 axis: {
                     domain: {
@@ -66,86 +74,16 @@ const PieChart = () => {
                 from: 'color',
                 modifiers: [["darker", 2]],
             }}
-            // defs={[
-            //     {
-            //         id: 'dots',
-            //         type: 'patternDots',
-            //         background: 'inherit',
-            //         color: 'rgba(255, 255, 255, 0.3)',
-            //         size: 4,
-            //         padding: 1,
-            //         stagger: true
-            //     },
-            //     {
-            //         id: 'lines',
-            //         type: 'patternLines',
-            //         background: 'inherit',
-            //         color: 'rgba(255, 255, 255, 0.3)',
-            //         rotation: -45,
-            //         lineWidth: 6,
-            //         spacing: 10
-            //     }
-            // ]}
-            // fill={[
-            //     {
-            //         match: {
-            //             id: 'ruby'
-            //         },
-            //         id: 'dots'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'c'
-            //         },
-            //         id: 'dots'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'go'
-            //         },
-            //         id: 'dots'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'python'
-            //         },
-            //         id: 'dots'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'scala'
-            //         },
-            //         id: 'lines'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'lisp'
-            //         },
-            //         id: 'lines'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'elixir'
-            //         },
-            //         id: 'lines'
-            //     },
-            //     {
-            //         match: {
-            //             id: 'javascript'
-            //         },
-            //         id: 'lines'
-            //     }
-            // ]}
             legends={[
                 {
                     anchor: 'bottom',
                     direction: 'row',
                     justify: false,
-                    translateX: 10,
-                    translateY: 56,
+                    translateX: 25,
+                    translateY: 60,
                     itemsSpacing: 0,
-                    itemWidth: 100,
-                    itemHeight: 18,
+                    itemWidth: 80,
+                    itemHeight: 10,
                     itemTextColor: colors.grey[100],
                     itemDirection: 'left-to-right',
                     itemOpacity: 1,
