@@ -2,17 +2,27 @@ import React from 'react'
 import { ResponsivePie } from '@nivo/pie'
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
-import { netData } from "../../data/netData";
+import { quarcnt } from "../../data/quarcnt";
 
 
 const PieChart = ({ focused, setFocusedNode, selected, setSelected, year }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    var focusedData = netData.nodes.filter(item => String(item.id) === String(focused))[0].pieData;
-    var data = focusedData[Object.keys(focusedData)[0]]
-    if (year !== null && focusedData[year] != null) {
-        data = focusedData[year];
+    if (focused in quarcnt) {
+        var focusedData = quarcnt[focused];
+        var data = focusedData["2014"]
+        if (year !== null && focusedData[year] != null) {
+            data = focusedData[year];
+        } else {
+            data = [{
+                "id": "Data missing",
+            }]
+        }
+    }else {
+        data = [{
+            "id": "Data missing",
+        }]
     }
 
     return (

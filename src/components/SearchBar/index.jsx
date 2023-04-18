@@ -13,10 +13,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HealingIcon from '@mui/icons-material/Healing';
-import { netData } from "../../data/netData";
 
 
-function SearchBar({ focused, setFocusedNode, selected, setSelected }) {
+function SearchBar({ focused, setFocusedNode, selected, setSelected, netData }) {
 
   const [value, setValue] = React.useState();  // can be removed, same as focused?
   // const [inputValue, setInputValue] = React.useState();

@@ -28,9 +28,9 @@ const Topbar = () => {
         <Typography variant="h1" color={colors.grey[100]} fontWeight="bold">
           {"Drug Database Visualization"}
         </Typography>
-        <Typography variant="h5" color={colors.grey[100]} fontWeight="bold" >
+        {/* <Typography variant="h5" color={colors.grey[100]} fontWeight="bold" >
           {"CSE5544"}
-        </Typography>
+        </Typography> */}
       </Box>
 
       {/* ICONS */}

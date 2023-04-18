@@ -1,9 +1,7 @@
 import React from 'react'
-import { ForceGraph3D } from 'react-force-graph';
+import { ForceGraph3D, ForceGraph2D } from 'react-force-graph';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import { netData } from "../../data/netData";
-// import * as dat from 'dat.gui';
 
 const h = document.body.clientHeight;
 const w = document.body.clientWidth;
@@ -20,7 +18,7 @@ function genRandomTree(N = 300, reverse = false) {
   };
 }
 
-const NetGraph = ({ focused, setFocusedNode, selected, setSelected }) => {
+const NetGraph = ({ focused, setFocusedNode, selected, setSelected, netData }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   
@@ -33,19 +31,19 @@ const NetGraph = ({ focused, setFocusedNode, selected, setSelected }) => {
   const data = React.useMemo(() => {
     const gData = netData;
     // const gData = genRandomTree();
-    // console.log(gData)
     gData.links.forEach(link => {
-      const a = gData.nodes[link.source];
-      const b = gData.nodes[link.target];
+      const a = gData.nodes.find(n => n.id === link.source);
+      const b = gData.nodes.find(n => n.id === link.target);
       !a.neighbors && (a.neighbors = []);
       !b.neighbors && (b.neighbors = []);
-      a.neighbors.push(b);
-      b.neighbors.push(a);
+      a.neighbors.push(b.id);
+      b.neighbors.push(a.id);
       !a.links && (a.links = []);
       !b.links && (b.links = []);
       a.links.push(link);
       b.links.push(link);
     });
+    // console.log(gData);
     return gData;
   }, []);
 
@@ -58,9 +56,20 @@ const NetGraph = ({ focused, setFocusedNode, selected, setSelected }) => {
     highlightNodes.clear();
     highlightLinks.clear();
     if (node) {
-      highlightNodes.add(node);
-      node.neighbors.forEach(neighbor => highlightNodes.add(neighbor));
-      node.links.forEach(link => highlightLinks.add(link));
+      if (node.neighbors != undefined){
+        node.neighbors.forEach(neighbor => highlightNodes.add(neighbor));
+        highlightNodes.add(node.id)
+      }
+      if (node.links != undefined){
+        node.links.forEach(link => highlightLinks.add(link));
+        // node.links.forEach(link => {
+        //   if (link.source==node.id) {
+        //     // console.log(link);
+        //     highlightLinks.add(link)
+        //     // console.log(highlightLinks.has(link));
+        //   }  
+        // });
+      }
     }
     setHoverNode(node || null);
     updateHighlight();
@@ -96,29 +105,78 @@ const NetGraph = ({ focused, setFocusedNode, selected, setSelected }) => {
 
 
   return (
-    <ForceGraph3D 
-      graphData={data}
-      width={0.4*w}
-      height={0.7*h}
-      backgroundColor={colors.primary[400]}
 
-      nodeLabel={node => node.id + ": " + node.info}
-      
-      // link style
-      linkDirectionalParticles={2}
-      linkWidth={link => highlightLinks.has(link) ? 1 : 1}
-      linkDirectionalParticleWidth={link => highlightLinks.has(link) ? 2 : 1}
-      linkColor={link => highlightLinks.has(link) ? colors.grey[100] : colors.grey[200]}
-      
-      // node style 
-      nodeRelSize={2}
-      nodeColor={node => highlightNodes.has(node) ? colors.blueAccent[400] : colors.greenAccent[500]}
-      onNodeHover={handleNodeHover}
-      
-      // ref 
-      ref={fgRef}
-      onNodeClick={handleClick}
-    />
+    {...hoverNode !== null ?
+      <ForceGraph3D 
+        graphData={data}
+        width={0.4*w}
+        height={0.7*h}
+        backgroundColor={colors.primary[400]}
+  
+        nodeLabel={node => node.id}
+        
+        // link style
+        linkWidth={link => highlightLinks.has(link) ? 1 : 1}
+        linkColor={link => highlightLinks.has(link) ? colors.grey[300] : colors.grey[600]}
+        // linkDirectionalParticles={2}
+        // linkDirectionalParticleWidth={link => {
+        //   var thisLink = {source: link.source.id, target: link.target.id}
+        //   console.log(thisLink)
+        //   highlightLinks.forEach(link => console.log(link == thisLink))
+        //   if (highlightLinks.has(thisLink)) {
+        //     return 2;
+        //   } else {
+        //     return 1;
+        //   }
+        //   // highlightLinks.has(link) ? 2 : 1
+        // }}
+        
+        // node style 
+        nodeRelSize={5}
+        nodeColor={node => highlightNodes.has(node.id) ? colors.blueAccent[400] : colors.grey[300]}
+        onNodeHover={handleNodeHover}
+        
+        // ref 
+        ref={fgRef}
+        onNodeClick={handleClick}
+      />
+      :
+      <ForceGraph3D 
+        graphData={data}
+        width={0.4*w}
+        height={0.7*h}
+        backgroundColor={colors.primary[400]}
+  
+        nodeLabel={node => node.id}
+        
+        // link style
+        linkWidth={link => highlightLinks.has(link) ? 1 : 1}
+        linkColor={colors.grey[500]}
+        // linkDirectionalParticles={2}
+        // linkDirectionalParticleWidth={link => {
+        //   var thisLink = {source: link.source.id, target: link.target.id}
+        //   console.log(thisLink)
+        //   highlightLinks.forEach(link => console.log(link == thisLink))
+        //   if (highlightLinks.has(thisLink)) {
+        //     return 2;
+        //   } else {
+        //     return 1;
+        //   }
+        //   // highlightLinks.has(link) ? 2 : 1
+        // }}
+        
+        // node style 
+        nodeRelSize={5}
+        nodeColor={node => highlightNodes.has(node.id) ? colors.blueAccent[400] : colors.greenAccent[500]}
+        onNodeHover={handleNodeHover}
+        
+        // ref 
+        ref={fgRef}
+        onNodeClick={handleClick}
+      />
+    }
+
+    
   )
 }
 

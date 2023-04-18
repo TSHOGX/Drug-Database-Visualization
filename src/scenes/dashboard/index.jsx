@@ -7,10 +7,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import NetGraph from "../../components/NetGraph";
 import PieChart from "../../components/PieChart"
-// import BarChart from "../../components/BarChart"
 import LineChart from "../../components/LineChart"
 import SearchBar from "../../components/SearchBar";
-import { netData } from "../../data/netData";
+import { similarity as data } from "../../data/similarity";
 
 const h = document.body.clientHeight;
 
@@ -18,11 +17,12 @@ const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [focusedNode, setFocusedNode] = React.useState("0");
+  const [focusedNode, setFocusedNode] = React.useState("gramicidin");
   const [selected, setSelected] = React.useState([]);
   const [year, setYear] = React.useState(null);
 
-  let focusedYearList = Object.keys(netData.nodes.filter(item => String(item.id) === String(focusedNode))[0].pieData)
+  // let focusedYearList = Object.keys(similarity.nodes.filter(item => String(item.id) === String(focusedNode))[0].pieData)
+  let focusedYearList = [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014]
   const handleChange = (event) => {
     setYear(event.target.value);
   };
@@ -65,6 +65,7 @@ const Dashboard = () => {
             setFocusedNode={setFocusedNode}
             selected={selected}
             setSelected={setSelected}
+            netData={data}
           />
         </Box>
 
@@ -111,6 +112,7 @@ const Dashboard = () => {
             setFocusedNode={setFocusedNode}
             selected={selected}
             setSelected={setSelected}
+            netData={data}
           />
         </Box>
 

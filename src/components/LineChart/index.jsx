@@ -2,14 +2,7 @@ import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
-import { netData } from "../../data/netData";
-
-
-const lineData = netData.nodes.map(function(obj) {
-    obj['data'] = obj['lineData']; // Assign new key
-    delete obj['lineData']; // Delete old key
-    return obj;
-});
+import { yearcnt as lineData} from "../../data/yearcnt";
 
 const LineChart = ({ focused, setFocusedNode, selected, setSelected }) => {
     const theme = useTheme();
@@ -73,7 +66,7 @@ const LineChart = ({ focused, setFocusedNode, selected, setSelected }) => {
         axisBottom={{
             orient: 'bottom',
             format: '%Y',
-            tickValues: 'every 1 years',
+            tickValues: 'every 2 years',
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
