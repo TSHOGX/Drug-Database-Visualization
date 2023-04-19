@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, Typography } from "@mui/material";
 import { tokens } from "../../theme";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,6 +12,7 @@ import SearchBar from "../../components/SearchBar";
 import { similarity as data } from "../../data/similarity";
 
 const h = document.body.clientHeight;
+const w = document.body.clientWidth;
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -70,7 +71,7 @@ const Dashboard = () => {
         </Box>
 
 
-        {/* COL 2 ROW 2 Bar */}
+        {/* COL 2 ROW 2 Line */}
         <Box
           sx={{
             boxShadow: 16,
@@ -82,9 +83,21 @@ const Dashboard = () => {
           gridColumn="span 2"
           gridRow="span 1"
           display="flex"
+          flexDirection="column"
           alignItems="center"
-          justifyContent="center"
+          // justifyContent="space-between"
         >
+          <Typography
+            height={0}
+            mt="25px"
+            mb="-25px"
+            variant="h5"
+            fontWeight="500"
+            color={colors.grey[100]}
+          >
+            Growth of ADR Reports Over Time 
+          </Typography>
+          
           <LineChart 
             focused={focusedNode}
             setFocusedNode={setFocusedNode}
@@ -132,6 +145,19 @@ const Dashboard = () => {
           alignItems="top"
           justifyContent="center"
         >
+          <Typography
+            height={0}
+            width={0}
+            mt="25px"
+            mb="-25px"
+            ml="25px"
+            mr="-5px"
+            variant="h5"
+            fontWeight="500"
+            color={colors.grey[100]}
+          >
+            ADR Reports For One Year ({focusedNode}) 
+          </Typography>
           <PieChart 
             focused={focusedNode}
             setFocusedNode={setFocusedNode}
@@ -139,7 +165,7 @@ const Dashboard = () => {
             setSelected={setSelected}
             year={year}
           />
-          <FormControl variant="standard" sx={{ mt: 2, mr: 2, minWidth: 55 }}>
+          <FormControl variant="standard" sx={{ mt: 2, mr: 4, ml:-4, minWidth: 55 }}>
               <InputLabel id="select-year">Year</InputLabel>
               <Select
                   labelId="select-year"

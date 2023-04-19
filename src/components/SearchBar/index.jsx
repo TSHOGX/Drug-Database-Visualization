@@ -98,7 +98,7 @@ function SearchBar({ focused, setFocusedNode, selected, setSelected, netData }) 
               sx={{ width: "60%", margin: "0 auto"}}
               onClick={() => handleClickList(String(item.id))}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ mr:-2 }} >
                 <HealingIcon />
               </ListItemIcon>
               <ListItemText

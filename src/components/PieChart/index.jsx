@@ -12,7 +12,7 @@ const PieChart = ({ focused, setFocusedNode, selected, setSelected, year }) => {
     if (focused in quarcnt) {
         var focusedData = quarcnt[focused];
         var data = focusedData["2014"]
-        if (year !== null && focusedData[year] != null) {
+        if (year !== null && focusedData[year] !== null && focusedData[year].length > 0 ) {
             data = focusedData[year];
         } else {
             data = [{

@@ -101,6 +101,7 @@ const NetGraph = ({ focused, setFocusedNode, selected, setSelected, netData }) =
       node, // lookAt ({ x, y, z })
       2000  // ms transition duration
     );
+    // setFocusedNode(node.id);
   }, [fgRef]);
 
 
