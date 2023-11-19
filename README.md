@@ -1,6 +1,6 @@
 # Drug Database Visualization
 
-> Check out the live website [here](https://faers.tshogx.online/)!
+> Check out the live website [here](https://tangerine-caramel-3353c4.netlify.app)!
 
 Interactive visualization dashboard of drug similarity and ADR for accelerating drug safety research. 
 
